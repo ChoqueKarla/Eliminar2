@@ -1,0 +1,33 @@
+#!/bin/bash
+# Script para desinstalar Apache, PHP, MariaDB, OpenSSH y limpiar el sistema
+
+# Desinstalar Apache
+sudo apt-get remove --purge apache2 apache2-utils apache2.2-bin apache2-common -y
+
+# Desinstalar PHP
+sudo apt-get remove --purge php* libapache2-mod-php* -y
+
+# Desinstalar MariaDB
+sudo apt-get remove --purge mariadb-server mariadb-client mariadb-common mariadb-client-core* mariadb-server-core* -y
+
+# Desinstalar OpenSSH
+sudo apt-get remove --purge openssh-server openssh-client -y
+
+# Limpiar archivos huérfanos
+sudo apt-get autoremove --purge -y
+
+# Limpiar la caché de apt
+sudo apt-get clean
+
+# Eliminar configuraciones de MariaDB (bases de datos y archivos de configuración)
+sudo rm -rf /etc/mysql /var/lib/mysql
+
+# Eliminar los usuarios 'noelia' y 'jaime'
+sudo userdel -r noelia || true
+sudo userdel -r jaime || true
+
+# Eliminar reglas de firewall relacionadas con SSH y Apache
+sudo ufw delete allow 22 || true
+sudo ufw delete allow 'Apache Full' || true
+
+echo "✅ Todo desinstalado y limpiado correctamente."
